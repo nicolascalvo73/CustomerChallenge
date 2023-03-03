@@ -1,0 +1,25 @@
+<div class="container">
+  <h2>
+    <mat-label class="title">Send me a email</mat-label>
+  </h2>
+  
+  <mat-form-field class="input" appearance="fill">
+    <mat-label color="accent">Subject</mat-label>
+    <input matInput [(ngModel)]="subject" (change)="urlChange()" >
+  </mat-form-field>
+  
+  <mat-form-field class="input" appearance="fill">
+    <mat-label color="accent">Message</mat-label>
+    <textarea matInput [(ngModel)]="message" (change)="urlChange()" ></textarea>
+  </mat-form-field>
+
+  <div class="demo-button-container">
+    <a href={{url}} (click)="closeContact()" mat-dialog-close mat-raised-button color="accent" class="demo-button" [disabled]="sendBtn" >
+      SEND
+    </a>
+    <button mat-dialog-close mat-raised-button class="demo-button" (click)="closeContact()">
+      Cancel
+    </button>
+  </div>
+
+</div>

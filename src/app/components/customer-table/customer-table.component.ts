@@ -11,9 +11,9 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Costumers } from 'src/app/data/customers.data';
 import { Costumer } from 'src/app/models/costumer.model';
-
-
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CostumerFormComponent } from '../costumer-form';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-customer-table',
@@ -23,6 +23,7 @@ import { Costumer } from 'src/app/models/costumer.model';
     MatPaginatorModule, 
     MatTableModule, 
     MatFormFieldModule, 
+    MatDialogModule,
     MatInputModule, 
     MatSortModule, 
     MatButtonModule,
@@ -37,6 +38,10 @@ export class CustomerTableComponent {
   displayedColumns: string[] = ['select', 'id', 'name', 'lastName', 'status', 'email', 'phone'];
   dataSource: MatTableDataSource<Costumer>;
   selection = new SelectionModel<Costumer>(true, []);
+  costumers = Costumers;
+  selectedRows = [];
+  removeBtn : Boolean = true;
+  
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -66,7 +71,7 @@ export class CustomerTableComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   
-  constructor( private _liveAnnouncer: LiveAnnouncer ) {
+  constructor( public dialog: MatDialog, private _liveAnnouncer: LiveAnnouncer ) {
     this.dataSource = new MatTableDataSource(Costumers);
   }
 
@@ -91,7 +96,44 @@ export class CustomerTableComponent {
       this.dataSource.paginator.firstPage();
     }
   }
-  ngOnInit() {}
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(CostumerFormComponent, {
+      width: '550px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+  }
+
+  closeDialog(){
+    this.dialog.closeAll();
+  }
+
+  selectionToggle( id: String ){
+    const checked: String[] = this.selectedRows
+
+    if( checked.find( e => e == id) ){
+      checked.splice( checked.indexOf(id) , 1)
+      this.removeBtn = !checked ? false : true;
+    }else{
+      checked.push(id)
+      this.removeBtn = false;
+    }
+  };
+
+  removeCostumer(){
+    const selection = this.selectedRows
+    const data = this.costumers
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        selection.forEach( n => n == e.id ? data.splice( i, 1 ) : ''); 
+      }
+      console.log(data)
+  };
+
+  ngOnInit() {
+  };
+
 }
 
 

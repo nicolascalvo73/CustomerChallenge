@@ -4,13 +4,14 @@
 </mat-form-field>
 
 <div class="demo-button-container">
-  <button mat-raised-button  class="demo-button">
+  <button (click)="openDialog('300ms', '500ms')" mat-raised-button  class="demo-button">
     Add Costumer
   </button>
   <button
       mat-raised-button
-      
-      class="demo-button">
+      class="demo-button"
+      [disabled]="removeBtn"
+      (click)="removeCostumer()" >
     Remove Costumer
   </button>
 </div>
@@ -22,14 +23,10 @@
             <!-- Checkbox Column -->
           <ng-container matColumnDef="select" >
             <th mat-header-cell *matHeaderCellDef >
-              <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()"
-                            [aria-label]="checkboxLabel()">
-              </mat-checkbox>
             </th>
             <td mat-cell *matCellDef="let row" >
               <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="selectionToggle(row.id)"
                             (change)="$event ? selection.toggle(row) : null"
                             [checked]="selection.isSelected(row)"
                             [aria-label]="checkboxLabel(row)">

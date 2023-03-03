@@ -5,14 +5,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { CostumerFormComponent } from './components/costumer-form/costumer-form.component';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     ToolbarComponent,
+    CostumerFormComponent, 
+    ContactComponent,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
