@@ -31,7 +31,10 @@
     
     <mat-form-field class="input" appearance="fill">
       <mat-label color="accent">Phone</mat-label>
-      <input placeholder="numbers only" matInput type="number" [(ngModel)]="costumer.phone" (keypress)="validateTypeNumber()" pattern="[0-9]*">
+      <input placeholder="Enter the 10 digits of your phone" matInput type="text" 
+      [(ngModel)]="costumer.phone" (change)="validateTypeNumber()" pattern="[0-9]*" 
+      [maxlength]="10" [disabled]="phoneInput">
+        <mat-icon matSuffix color="accent" (click)="clearPhone()">mode_edit</mat-icon>
     </mat-form-field>
 
   

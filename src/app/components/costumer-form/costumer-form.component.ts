@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CostumerServ } from 'src/app/services/costumer.service';
-import { Costumer } from '../../models/costumer.model';
 import { Costumers } from '../../data/customers.data';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { Costumer } from '../../models/costumer.model';
+import { CustomerTableComponent } from '../customer-table';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class CostumerFormComponent {
   constructor( private _snackBar: MatSnackBar, public dialogRef: MatDialogRef<CostumerFormComponent>) {}
 
   sendForm: boolean = false;
+  phoneInput: boolean = false;
 
   id: string = '';
   name: string = '';
@@ -53,9 +55,23 @@ export class CostumerFormComponent {
 
   validateTypeNumber(){
     const n = this.costumer.phone;
-    if ( !n  || n.toString().includes(".") ){
+    if ( !n  || n.toString().includes(".") || n.toString().includes("+") || n.toString().includes("-") || n.toString().length != 10 ){
       this.openSnackBar('Verify your phone', '', {duration: 1500});
-    }
+    }else{this.phoneFormat()}
+    ;
+  }
+
+  clearPhone(){
+    this.costumer.phone = ''
+    this.phoneInput = false;
+  }
+
+  phoneFormat(){
+    const tel = this.costumer.phone
+    const phone = tel.split("")
+      this.costumer.phone = `+54 (${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`
+      this.phoneInput = true;
+      return this.costumer.phone
   }
 
   validateEmail(){
@@ -94,7 +110,6 @@ export class CostumerFormComponent {
     }
   }
 
-
   openSnackBar(message: string, action: string, duration: {}) {
     this._snackBar.open(message, action, duration);
   }
@@ -107,8 +122,7 @@ export class CostumerFormComponent {
 
   sendCostumerForm(){
     this.costumer.id = crypto.randomUUID();
-    this.costumers.push(this.costumer);
-    console.log(this.costumer)
+    this.costumers.unshift(this.costumer);
     this.dialogRef.close();
   }
 
